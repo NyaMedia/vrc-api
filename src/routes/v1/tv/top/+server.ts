@@ -33,7 +33,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	for (const show of shows.results) {
 		if (vrcshows.length >= 10) break;
 
-		const isAnime = show.genre_ids.includes(16) || show.original_language === 'ja';
+		const isAnime = show.genre_ids.includes(16) && show.original_language === 'ja';
 		if (isAnime) continue;
 
 		const showDetails = await tmdb.tvShows.details(show.id);

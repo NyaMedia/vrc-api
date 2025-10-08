@@ -45,7 +45,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	let vrcmovies: Movie[] = [];
 
 	for (const movie of movies.results) {
-		if (vrcmovies.length < 10) {
+		if (vrcmovies.length >= 10) {
+			const isAnime = movie.genre_ids.includes(16) && movie.original_language === 'ja';
+			if (isAnime) continue;
+
 			vrcmovies.push({
 				title: `${movie.title} (${movie.release_date.split('-')[0]})`,
 				releaseYear: movie.release_date.split('-')[0],

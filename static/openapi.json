@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "VRC API",
+    "description": "THIS PAGE IS OUT OF DATE!!! DON'T USE RN!!!!!\nVRC API for accessing movies and media content through VRChat URLs.\n\n**Important Notes:**\n- This API is under development\n- Please reach out before using this API\n- VRCUrls are immutable and you must create a pool of 10,000 VRCUrls that the server will use (you can do so using nya.llc/vrc/gen)\n- All resources in search results are substituted by integer corresponding to VRCUrl array positions",
+    "version": "1.0.0",
+    "contact": {
+      "url": "https://nya.llc"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://nya.llc/vrc/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/url/{pool}/{index}": {
+      "get": {
+        "summary": "Get VRCUrl redirect",
+        "description": "Retrieve a VRCUrl redirect for a specific pool and index.\nResponse may be:\n- 302 redirect to video URL\n- Additional data for a route\n- \"404 not found\" video",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "path",
+            "required": true,
+            "description": "Must be same as pool param used in search endpoint",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "description": "VRCUrl index number",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9999
+            },
+            "example": 1234
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to video URL or resource",
+            "headers": {
+              "Location": {
+                "description": "URL to redirect to",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - returns 404 video"
+          }
+        }
+      }
+    },
+    "/mov/search": {
+      "get": {
+        "summary": "Search movies",
+        "description": "Get movies for a search query using VRCUrl pool system",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          },
+          {
+            "name": "input",
+            "in": "query",
+            "required": false,
+            "description": "Search query with special formatting. All characters up to and including the unicode character '→' are ignored, then whitespace is trimmed.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "   Type movie search here →                       spiderman"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Search query with no special interpretation",
+            "schema": {
+              "type": "string"
+            },
+            "example": "spiderman"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Movie"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "results": [
+                    {
+                      "title": "Spider-Man",
+                      "releaseYear": "2002",
+                      "overview": "After being bitten by a genetically altered spider at Oscorp, nerdy but endearing high school student Peter Parker is endowed with amazing powers to become the superhero known as Spider-Man.",
+                      "rating": "7.3",
+                      "vrcurl": 1234
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
+    },
+    "/mov/top": {
+      "get": {
+        "summary": "Get top rated movies",
+        "description": "Gets the top rated movies. Identical to search endpoint but without input parameter.",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with top rated movies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Movie"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Movie": {
+        "type": "object",
+        "required": [
+          "title",
+          "vrcurl"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Movie title",
+            "example": "Spider-Man"
+          },
+          "releaseYear": {
+            "type": "string",
+            "description": "Year the movie was released",
+            "example": "2002"
+          },
+          "overview": {
+            "type": "string",
+            "description": "Movie overview/synopsis (may contain spoilers)",
+            "example": "After being bitten by a genetically altered spider at Oscorp, nerdy but endearing high school student Peter Parker is endowed with amazing powers to become the superhero known as Spider-Man."
+          },
+          "rating": {
+            "type": "string",
+            "description": "Movie rating out of 10",
+            "example": "7.3"
+          },
+          "vrcurl": {
+            "type": "integer",
+            "description": "Index of VRCUrl that will redirect to the movie file, or a 404 video if not found",
+            "minimum": 0,
+            "maximum": 9999,
+            "example": 1234
+          }
+        }
+      }
+    },
+    "parameters": {
+      "PoolParameter": {
+        "name": "pool",
+        "in": "query",
+        "required": true,
+        "description": "Unique ID for your VRCUrl pool",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z-_]+\\d*$"
+        }
+      }
+    }
+  }
+}

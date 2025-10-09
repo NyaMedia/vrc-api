@@ -4,12 +4,15 @@ import type { RequestHandler } from './$types';
 import { ofetch } from 'ofetch';
 import movie from './movie';
 import { tvSeason, tvStream } from './tv';
+import { animeEpisodes, animeStream } from './anime';
 
 export type KvURL = {
-	type: 'movie' | 'tvseason' | 'tv' | 'animemeta' | 'anime';
+	type: 'movie' | 'tvseason' | 'tv' | 'animestream' | 'anime';
 	id?: number;
 	season?: number;
 	episode?: number;
+	url?: string;
+	number?: number;
 };
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -27,6 +30,10 @@ export const GET: RequestHandler = async ({ params }) => {
 		return tvSeason(customFetch, kvData, params.pool);
 	} else if (kvData.type == 'tv') {
 		return tvStream(customFetch, kvData);
+	} else if (kvData.type == 'anime') {
+		return animeEpisodes(customFetch, kvData, params.pool);
+	} else if (kvData.type == 'animestream') {
+		return animeStream(customFetch, kvData);
 	} else {
 		return json({ error: 'Unknown type' });
 	}

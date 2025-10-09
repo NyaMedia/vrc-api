@@ -58,7 +58,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			title: show.name,
 			releaseYear: show.first_air_date.split('-')[0],
 			overview: show.overview,
-			rating: show.vote_average,
+			rating: `${show.vote_average.toFixed(1)} / 10`,
 			seasons: []
 		};
 

@@ -29,22 +29,22 @@ export const GET: RequestHandler = async ({ url }) => {
 	let vrcmovies: Movie[] = [];
 
 	for (const movie of movies.results) {
-		if (vrcmovies.length >= 10) {
-			const isAnime = movie.genre_ids.includes(16) && movie.original_language === 'ja';
-			if (isAnime) continue;
+		if (vrcmovies.length >= 10) break;
 
-			vrcmovies.push({
-				title: `${movie.title} (${movie.release_date.split('-')[0]})`,
-				releaseYear: movie.release_date.split('-')[0],
-				overview: movie.overview,
-				rating: `${movie.vote_average.toFixed(1)} / 10`,
-				vrcurl: nextNumber
-			});
+		const isAnime = movie.genre_ids.includes(16) && movie.original_language === 'ja';
+		if (isAnime) continue;
 
-			await vrcKV.set(`${pool}:${nextNumber}`, { type: 'movie', id: movie.id });
+		vrcmovies.push({
+			title: `${movie.title} (${movie.release_date.split('-')[0]})`,
+			releaseYear: movie.release_date.split('-')[0],
+			overview: movie.overview,
+			rating: `${movie.vote_average.toFixed(1)} / 10`,
+			vrcurl: nextNumber
+		});
 
-			nextNumber++;
-		}
+		await vrcKV.set(`${pool}:${nextNumber}`, { type: 'movie', id: movie.id });
+
+		nextNumber++;
 	}
 
 	await vrcKV.set(`${pool}:nextNumber`, nextNumber);

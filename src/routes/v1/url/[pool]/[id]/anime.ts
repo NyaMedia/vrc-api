@@ -29,7 +29,7 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 	);
 
 	if (!episodes) {
-		return json({ error: 'Anime not found' }, { status: 500 });
+		return json({ error: 'Anime not found', episodes: [] }, { status: 500 });
 	}
 
 	console.log(episodes);

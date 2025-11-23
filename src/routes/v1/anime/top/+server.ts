@@ -65,6 +65,8 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		if (show.status !== 'FINISHED' && show.status !== 'RELEASING') continue;
 
+		if (show.title.english === 'ONE PIECE') continue;
+
 		const newShow: Anime = {
 			title: show.title.english,
 			releaseYear: show.seasonYear,

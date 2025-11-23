@@ -13,6 +13,7 @@ export type KvURL = {
 	episode?: number;
 	url?: string;
 	number?: number;
+	safe?: number;
 };
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -25,7 +26,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	}
 
 	if (kvData.type == 'movie') {
-		return movie(customFetch, kvData);
+		return movie(customFetch, kvData, params.pool, params.id);
 	} else if (kvData.type == 'tvseason') {
 		return tvSeason(customFetch, kvData, params.pool);
 	} else if (kvData.type == 'tv') {

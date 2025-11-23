@@ -81,6 +81,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		if (vrcshows.length >= 10) break;
 
 		if (show.status !== 'FINISHED' && show.status !== 'RELEASING') continue;
+		if (show.title.english === 'ONE PIECE') continue;
 
 		const newShow: Anime = {
 			title: show.title.english,

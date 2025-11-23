@@ -66,8 +66,10 @@ export async function animeStream(customFetch: $Fetch, kvData: KvURL) {
 	}
 
 	const { success } = await customFetch(
-		`/api/cache/blossom/get?url=${encodeURIComponent(kvData.url)}&num=${kvData.number}&dub=false`
-	);
+		`/api/cache/blossom/get?url=${encodeURIComponent(kvData.url)}&num=${kvData.number}&dub=false`,
+		{ timeout: 19000 } // vrc timeout is 19s i think
+	).catch(() => ({ success: false }));
+
 	if (success) {
 		return redirect(
 			302,

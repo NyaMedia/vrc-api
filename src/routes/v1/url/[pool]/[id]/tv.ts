@@ -69,8 +69,10 @@ export async function tvStream(customFetch: $Fetch, kvData: KvURL) {
 	console.log(`ID: ${kvData.id}, Season: ${kvData.season}, Episode: ${kvData.episode}`);
 
 	const { success } = await customFetch(
-		`/api/cache/auto/tv/get?id=${kvData.id}&s=${kvData.season}&e=${kvData.episode}`
-	);
+		`/api/cache/auto/tv/get?id=${kvData.id}&s=${kvData.season}&e=${kvData.episode}`,
+		{ timeout: 19000 } // vrc timeout is 19s i think
+	).catch(() => ({ success: false }));
+
 	if (success) {
 		return redirect(
 			302,

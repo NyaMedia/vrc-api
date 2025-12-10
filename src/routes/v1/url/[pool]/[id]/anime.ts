@@ -25,7 +25,7 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 	}
 
 	const { episodes, url } = await customFetch(
-		`/api/cache/sakura/episodes?id=${kvData.id}&dub=false`
+		`/api/cache/blossom/episodes?id=${kvData.id}&dub=false`
 	);
 
 	if (!episodes) {
@@ -40,7 +40,7 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 		if (episode.season_number === 0) continue;
 
 		seasonData.episodes.push({
-			name: `Episode ${episode.episode}`,
+			name: `${episode.episode}`,
 			overview: 'N/A',
 			air_date: 'N/A',
 			vrcurl: nextNumber
@@ -48,7 +48,8 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 
 		await vrcKV.set(`${pool}:${nextNumber}`, {
 			type: 'animestream',
-			url: episode.link,
+			url: url,
+			number: episode.number
 		});
 
 		nextNumber++;
@@ -60,19 +61,19 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 }
 
 export async function animeStream(customFetch: $Fetch, kvData: KvURL) {
-	if (!kvData.url) {
+	if (!kvData.url || !kvData.number) {
 		return json({ error: 'Missing anime episode data' }, { status: 500 });
 	}
 
 	const { success } = await customFetch(
-		`/api/cache/sakura/get?url=${encodeURIComponent(kvData.url)}`,
+		`/api/cache/blossom/get?url=${encodeURIComponent(kvData.url)}&num=${kvData.number}&dub=false`,
 		{ timeout: 19000 } // vrc timeout is 19s i think
 	).catch(() => ({ success: false }));
 
 	if (success) {
 		return redirect(
 			302,
-			`https://nya.llc/stream/sakura/${encodeURIComponent(kvData.url)}`
+			`https://nya.llc/stream/blossom/${encodeURIComponent(kvData.url.replace('/watch/', ''))}.${kvData.number}`
 		);
 	} else {
 		return redirect(302, '/errorvid');

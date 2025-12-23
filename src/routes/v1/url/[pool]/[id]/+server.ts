@@ -16,7 +16,10 @@ export type KvURL = {
 };
 
 export const GET: RequestHandler = async ({ params }) => {
-	const customFetch = ofetch.create({ baseURL: 'https://nya.llc' });
+	const customFetch = ofetch.create({
+		baseURL: 'https://nya.llc',
+		headers: { 'x-api-key': process.env.NYA_API_KEY || '' }
+	});
 
 	const kvData = await vrcKV.get<KvURL>(`${params.pool}:${params.id}`);
 

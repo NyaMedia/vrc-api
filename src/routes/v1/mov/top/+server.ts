@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	movies.results = movies.results.filter(
 		(result) =>
-			result.vote_count >= 50 && result.release_date && new Date(result.release_date) <= new Date()
+			result.vote_count >= 30 && result.release_date && new Date(result.release_date) <= new Date()
 	);
 
 	let vrcmovies: Movie[] = [];

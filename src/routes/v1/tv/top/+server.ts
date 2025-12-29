@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	shows.results = shows.results.filter(
 		(result) =>
-			result.vote_count >= 50 &&
+			result.vote_count >= 30 &&
 			result.first_air_date &&
 			new Date(result.first_air_date) <= new Date()
 	);

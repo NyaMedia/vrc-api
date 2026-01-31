@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://nya.llc/vrc/v1",
+      "url": "https://vrc.nya.llc/v1",
       "description": "Production server"
     }
   ],
@@ -177,6 +177,214 @@
           }
         }
       }
+    },
+    "/anime/search": {
+      "get": {
+        "summary": "Search anime",
+        "description": "Get anime for a search query using VRCUrl pool system",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          },
+          {
+            "name": "input",
+            "in": "query",
+            "required": false,
+            "description": "Search query with special formatting. All characters up to and including the unicode character '→' are ignored, then whitespace is trimmed.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "   Type anime search here →                       naruto"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Search query with no special interpretation",
+            "schema": {
+              "type": "string"
+            },
+            "example": "naruto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Anime"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
+    },
+    "/anime/top": {
+      "get": {
+        "summary": "Get top rated/trending anime",
+        "description": "Gets the top rated anime. Identical to search endpoint but without input parameter.",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with top rated anime",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Anime"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
+    },
+    "/tv/search": {
+      "get": {
+        "summary": "Search TV shows",
+        "description": "Get TV shows for a search query using VRCUrl pool system",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          },
+          {
+            "name": "input",
+            "in": "query",
+            "required": false,
+            "description": "Search query with special formatting. All characters up to and including the unicode character '→' are ignored, then whitespace is trimmed.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "   Type tv search here →                       breaking bad"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Search query with no special interpretation",
+            "schema": {
+              "type": "string"
+            },
+            "example": "breaking bad"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Show"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
+    },
+    "/tv/top": {
+      "get": {
+        "summary": "Get top rated TV shows",
+        "description": "Gets the top rated TV shows. Identical to search endpoint but without input parameter.",
+        "parameters": [
+          {
+            "name": "pool",
+            "in": "query",
+            "required": true,
+            "description": "Unique ID for your VRCUrl pool, only letters numbers hyphens or underscores",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-_]+\\d*$"
+            },
+            "example": "change_me"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with top rated TV shows",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Show"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing required parameters or invalid pool format"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -214,6 +422,80 @@
             "minimum": 0,
             "maximum": 9999,
             "example": 1234
+          }
+        }
+      },
+      "Anime": {
+        "type": "object",
+        "required": [
+          "title",
+          "episodesUrl"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Anime title"
+          },
+          "releaseYear": {
+            "type": "string",
+            "description": "Year the anime was released"
+          },
+          "overview": {
+            "type": "string",
+            "description": "Anime overview/synopsis"
+          },
+          "rating": {
+            "type": "string",
+            "description": "Anime rating out of 10"
+          },
+          "episodesUrl": {
+            "type": "integer",
+            "description": "VRCUrl index for episodes",
+            "minimum": 0,
+            "maximum": 9999
+          }
+        }
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "seasonName": {
+            "type": "string"
+          },
+          "vrcurl": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9999
+          }
+        }
+      },
+      "Show": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Show title"
+          },
+          "releaseYear": {
+            "type": "string",
+            "description": "Year the show was released"
+          },
+          "overview": {
+            "type": "string",
+            "description": "Show overview/synopsis"
+          },
+          "rating": {
+            "type": "string",
+            "description": "Show rating out of 10"
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Season"
+            }
           }
         }
       }

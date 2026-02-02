@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "VRC API",
-    "description": "THIS PAGE IS OUT OF DATE!!! DON'T USE RN!!!!!\nVRC API for accessing movies and media content through VRChat URLs.\n\n**Important Notes:**\n- This API is under development\n- Please reach out before using this API\n- VRCUrls are immutable and you must create a pool of 10,000 VRCUrls that the server will use (you can do so using nya.llc/vrc/gen)\n- All resources in search results are substituted by integer corresponding to VRCUrl array positions",
+    "description": "VRC API for accessing movies and media content through VRChat URLs.\n\n**Important Notes:**\n- This API is under development\n- Documentation may be incomplete or lacking detail. Please open an Issue/PR in NyaMedia/vrc-api\n- DO NOT attempt to use this api for anything other than VRChat prefabs.\n- VRCUrls are immutable and you must create a pool of 10,000 VRCUrls that the server will use (you can do so using vrc.nya.llc/gen)\n- All resources in search results are substituted by integer corresponding to VRCUrl array positions",
     "version": "1.0.0",
     "contact": {
       "url": "https://nya.llc"
@@ -18,7 +18,7 @@
     "/url/{pool}/{index}": {
       "get": {
         "summary": "Get VRCUrl redirect",
-        "description": "Retrieve a VRCUrl redirect for a specific pool and index.\nResponse may be:\n- 302 redirect to video URL\n- Additional data for a route\n- \"404 not found\" video",
+        "description": "Retrieve a VRCUrl redirect for a specific pool and index.\nResponse may be:\n- 302 redirect to video URL\n- Additional data for a route\n- 302 redirect to \"404 not found\" video",
         "parameters": [
           {
             "name": "pool",

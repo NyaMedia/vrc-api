@@ -1,6 +1,6 @@
 # Nya Media API for VRChat prefabs
 
-See https://vrc.nya.llc/spec for full API specification (OUTDATED, will update soon)
+See [vrc.nya.llc/spec](https://vrc.nya.llc/spec) for API docs.
 
 Working prefab implementation can be found at [artifishvr/MediaUI](https://github.com/artifishvr/MediaUI)
 

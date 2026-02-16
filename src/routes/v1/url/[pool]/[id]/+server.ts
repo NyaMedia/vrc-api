@@ -16,9 +16,13 @@ export type KvURL = {
 };
 
 export const GET: RequestHandler = async ({ params }) => {
+	if (!process.env.NYA_API_KEY) {
+		error(500, 'Missing NYA API key');
+	}
+
 	const customFetch = ofetch.create({
 		baseURL: 'https://nya.llc',
-		headers: { 'x-api-key': process.env.NYA_API_KEY || '' }
+		headers: { 'x-api-key': process.env.NYA_API_KEY }
 	});
 
 	const kvData = await vrcKV.get<KvURL>(`${params.pool}:${params.id}`);

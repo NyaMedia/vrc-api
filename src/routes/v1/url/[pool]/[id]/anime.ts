@@ -49,7 +49,7 @@ export async function animeEpisodes(customFetch: $Fetch, kvData: KvURL, pool: st
 		await vrcKV.set(`${pool}:${nextNumber}`, {
 			type: 'animestream',
 			url: url,
-			number: episode.number
+			number: episode.episode
 		});
 
 		nextNumber++;

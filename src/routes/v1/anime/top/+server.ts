@@ -66,7 +66,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		if (show.status !== 'FINISHED' && show.status !== 'RELEASING') continue;
 
 		const newShow: Anime = {
-			title: show.title.english,
+			title: show.title.english || show.title.romaji || show.title.native,
 			releaseYear: show.seasonYear,
 			overview: show.description,
 			rating: `${(show.averageScore / 10).toFixed(1)} / 10`,

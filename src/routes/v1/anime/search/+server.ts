@@ -85,7 +85,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		const newShow: Anime = {
 			title: show.title.english || show.title.romaji || show.title.native,
 			releaseYear: show.seasonYear,
-			overview: show.description,
+			overview: show.description.replace(/<[^>]*>/g, ''),
 			rating: `${(show.averageScore / 10).toFixed(1)} / 10`,
 			episodesUrl: nextNumber
 		};
